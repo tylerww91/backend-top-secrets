@@ -71,6 +71,19 @@ describe('top-secret routes', () => {
     });
   });
 
+  it('GET api/v1/secrets returns list of secrets for authenticated users', async () => {
+    const [agent] = await registerAndLogin();
+    const resp = await agent.get('/api/v1/secrets');
+    expect(resp.status).toBe(200);
+    expect(resp.body.length).toBe(3);
+    expect(resp.body[0]).toEqual({
+      id: expect.any(String),
+      title: expect.any(String),
+      description: expect.any(String),
+      createdAt: expect.any(String),
+    });
+  });
+
   afterAll(() => {
     pool.end();
   });
