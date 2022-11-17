@@ -48,6 +48,18 @@ describe('top-secret routes', () => {
     expect(res.status).toEqual(200);
   });
 
+  it('DELETE /api/v1/users/sessions logs out a user', async () => {
+    const agent = request.agent(app);
+    // const user = await UserService.create({ ...mockUser });
+
+    await agent
+      .post('/api/v1/users/sessions')
+      .send({ email: 'example@test.com', password: '123654' });
+
+    const resp = await agent.delete('/api/v1/users/sessions');
+    expect(resp.status).toBe(204);
+  });
+
   // it('returns the current user', async () => {
   //   const [agent, user] = await registerAndLogin();
   //   const me = await agent.get('/api/v1/users/me');
