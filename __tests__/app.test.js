@@ -71,7 +71,7 @@ describe('top-secret routes', () => {
     });
   });
 
-  it('GET api/v1/secrets returns list of secrets for authenticated users', async () => {
+  it('GET /api/v1/secrets returns list of secrets for authenticated users', async () => {
     const [agent] = await registerAndLogin();
     const resp = await agent.get('/api/v1/secrets');
     expect(resp.status).toBe(200);
@@ -82,6 +82,15 @@ describe('top-secret routes', () => {
       description: expect.any(String),
       createdAt: expect.any(String),
     });
+  });
+
+  it('POST /api/v1/secrets allows users to create secrets', async () => {
+    const [agent] = await registerAndLogin();
+    const resp = await agent
+      .post('/api/v1/secrets')
+      .send({ title: 'Birds are not real', description: 'they are drones' });
+    expect(resp.status).toBe(200);
+    expect(resp.body).toEqual({ message: 'secret creation successful!' });
   });
 
   afterAll(() => {
